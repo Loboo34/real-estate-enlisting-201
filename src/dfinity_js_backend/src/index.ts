@@ -28,7 +28,7 @@ const Property = Record({
   address: text,//address of the property
   propType: text, //type of property(home, land, office, etc)
   description: text,//description of the property
-  size: text,
+  size: nat64,
   price: text,
 });
 
@@ -36,7 +36,7 @@ const PropertyPayload = Record({
   address: text,
   propType: text,
   description: text,
-  size: text,
+  size: nat64,
   price: text,
 });
 
@@ -49,10 +49,14 @@ const ListingStatus = Variant({
 
 const Listings = Record({
   id: text,//id of the property
-//date: text,//date the property was listed
-  agent: Principal, //agent who listed the property
-  status: ListingStatus,//status of the property listing
+  propAddress: text,//address of the property
+  propType: text,//type of property(home, land, office, etc)
+  propDescription: text,//description of the property
+  propSize: nat64,
+  propPrice: text,
+  status: ListingStatus,
 });
+
 
 const User = Record({
   id: text,
@@ -95,12 +99,12 @@ export default Canister({
         return Err({ NotFound: "invalid payoad" });
       }
       const propertyId = uuidv4();
-      const propety = {
+      const property = {
         id: propertyId,
         ...payload,
       };
-      propertyStorage.insert(propertyId, propety);
-      return Ok(propety);
+      propertyStorage.insert(propertyId, property);
+      return Ok(property);
     }
   ),
 
@@ -139,21 +143,24 @@ export default Canister({
     return userStorage.values();
   }),
 
-  //add property listing
+  //add property listing by adding property details to property listing storage
   addPropertyListing: update(
     [text],
     Result(Listings, Message),
-    (payload) => {
-     // const propertyOpt = propertyStorage.get(propertyId);
-      // if (propertyOpt === null) {
-      //   return Err({ NotFound: "property not found" });
-      // }
-    const propertyId = uuidv4()
+    (propertyId) => {
+      const propertyOpt = propertyStorage.get(propertyId);
+      if (propertyOpt === null) {
+        return Err({ NotFound: "property not found" });
+      }
+      const property = propertyOpt.Some;
       const listing = {
         id: propertyId,
-       // date: new Date().toISOString(),
-        agent: ic.caller(),
-        status: { Active: "For sale" },
+        propAddress: property.address,
+        propType: property.propType,
+        propDescription: property.description,
+        propSize: property.size,
+        propPrice: property.price,
+        status: { Active: "Active" },
       };
       propertyListingStorage.insert(propertyId, listing);
       return Ok(listing);

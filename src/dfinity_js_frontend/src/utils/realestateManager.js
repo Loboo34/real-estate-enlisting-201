@@ -36,6 +36,11 @@ export async function getProperties() {
   }
 }
 
+//add property to listing
+export async function addPropertyListing(propertyId) {
+  return window.canister.realestateManager.addPropertyListing(propertyId);
+}
+
 //get property listings
 export async function getPropertyListings() {
   try {
@@ -49,10 +54,6 @@ export async function getPropertyListings() {
   }
 }
 
-//add property to listing
-export async function addPropertyListing(propertyId) {
-  return window.canister.realestateManager.addPropertyListing(propertyId);
-}
 
 //get user by id
 export async function getUser(userId) {

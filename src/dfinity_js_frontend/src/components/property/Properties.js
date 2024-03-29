@@ -44,15 +44,15 @@ const Properties = () => {
     }
   };
 
-    const addListing = async (property) => {
-    try {
-      await addPropertyListing(property.id);
-      NotificationSuccess("Property added successfully");
-      getProperties();
-    } catch (error) {
-      NotificationError(error);
-    }
-    }
+    // const addListing = async (property) => {
+    // try {
+    //   await addPropertyListing(property.id);
+    //   NotificationSuccess("Property added successfully");
+    //   getProperties();
+    // } catch (error) {
+    //   NotificationError(error);
+    // }
+    // }
 
 
   useEffect(() => {
@@ -86,13 +86,13 @@ const Properties = () => {
                   ..._property,
                 }}
                 //update={update}
-                addListing={addListing}
+               // addListing={addListing}
               />
             ))}
         </Row>
-     <div>
+      <div>
        <AddProperty save={addProperty} />
-     </div>
+     </div> 
       </>
       ) : (
          <Loader />

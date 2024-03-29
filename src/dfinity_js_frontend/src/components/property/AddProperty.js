@@ -32,7 +32,7 @@ const AddProperty = ({ save }) => {
           <Form>
             <FloatingLabel controlId="floatingInput" label="Size">
               <Form.Control
-                type="text"
+                type="number"
                 placeholder="Size"
                 value={size}
                 onChange={(e) => setSize(e.target.value)}
